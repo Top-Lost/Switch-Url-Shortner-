@@ -1,0 +1,5 @@
+python-dotenv
+swibots
+pymongo
+aiohttp
+regex
