@@ -4,7 +4,7 @@ import database as db
 
 
 async def gplink(id, url):
-    api_id = (await db.get_api(id)).get('gplink')
+    api_id = (await db.get_api(id))['gplink']
     
     if not api_id:
         return "Set Your API ID"

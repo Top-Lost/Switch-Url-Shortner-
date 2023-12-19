@@ -1,9 +1,8 @@
 from pymongo import MongoClient
 from config import DATABASE_URL, DATABASE_NAME
-from pymongo.server_api import ServerApi
 
 
-myclient = MongoClient(DATABASE_URL, server_api=ServerApi('1'))
+myclient = MongoClient(DATABASE_URL)
 mydb = myclient[DATABASE_NAME]
 col = mydb["URL Shortner"]
 
@@ -58,6 +57,3 @@ async def update_shortner(id, shortner):
     update_query = {"$set": {"shortner": shortner}}
     col.update_one(filter_query, update_query)
     
-async def get_api(id):
-    query = col.find_one({"_id":id})
-    return query.get('api')

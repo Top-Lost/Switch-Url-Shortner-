@@ -4,9 +4,7 @@ from database import add_user, is_user_exist, update_api, update_shortner, updat
 from plugins import gplink, atglinks, shareus
 from loader import load_modules
 import re
-import logging
-logging.basicConfig(filename="logs.txt", filemode="w",format='%(asctime)s %(message)s', level=logging.DEBUG)
-logger = logging.getLogger(__name__)
+
 
 app.set_bot_commands(
     [
