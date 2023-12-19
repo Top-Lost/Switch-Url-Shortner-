@@ -5,7 +5,6 @@ A Switch Bot written in Python which offers to shorten urls's with different sho
 - [GPlinks](https://gplinks.in/)
 - [ATG Links](https://atglinks.com/)
 - [Share Us](https://publisher.shareus.io/)
-
 *More Websites adding soon*
 
 # How to Deploy?
