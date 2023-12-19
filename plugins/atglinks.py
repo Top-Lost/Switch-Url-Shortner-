@@ -4,7 +4,7 @@ import database as db
 
 
 async def atglinks(id, url):
-    api_id = (await db.get_api(id))['atglinks']
+    api_id = (await db.get_api(id)).get('atglinks')
     
     if not api_id:
         return "Set Your API ID"

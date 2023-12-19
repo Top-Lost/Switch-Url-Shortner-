@@ -4,7 +4,7 @@ import database as db
 
 
 async def shareus(id, url):
-    api_id = (await db.get_api(id))['shareus']
+    api_id = (await db.get_api(id))('shareus')
     
     if not api_id:
         return "Set Your API ID"
