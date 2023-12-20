@@ -7,7 +7,7 @@ services:
     restart: on-failure
     ports:
       - "256:256"
-      - "8236:8236"
+      - "8268:8268"
 networks:
   default:
     external: true
