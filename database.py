@@ -16,7 +16,8 @@ def new_user(id, name):
         api=dict(
             gplink="",
             atglinks="",
-            shareus=""
+            shareus="",
+            gyanilinks=""
         )
     )
 
