@@ -3,7 +3,7 @@ import re
 import database as db
 
 
-async def shareus(id, url):
+async def get_shortlink(id, url):
     api_id = (await db.get_api(id))('shareus')
     
     if not api_id:

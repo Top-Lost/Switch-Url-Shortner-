@@ -3,7 +3,7 @@ import json
 import database as db
 
 
-async def gplink(id, url):
+async def get_shortlink(id, url):
     api_id = (await db.get_api(id)).get('gplink')
     
     if not api_id:

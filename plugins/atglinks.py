@@ -3,7 +3,7 @@ import json
 import database as db
 
 
-async def atglinks(id, url):
+async def get_shortlink(id, url):
     api_id = (await db.get_api(id)).get('atglinks')
     
     if not api_id:
