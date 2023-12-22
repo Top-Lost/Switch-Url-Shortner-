@@ -1,9 +1,11 @@
-from swibots import BotContext, CommandEvent, filters, BotCommand, MessageEvent
 from client import app
+from swibots import BotContext, CommandEvent, BotCommand, MessageEvent
+
 from database import add_user, is_user_exist, update_api, update_shortner, update_user, get_user
-from plugins import gplink, atglinks, shareus
+from plugins import gplink, atglinks, shareus, gyanilinks
+from helper import typeof, isvalidurl, types
 from loader import load_modules
-import re
+
 import logging
 logging.basicConfig(filename="logs.txt", filemode="w",format='%(asctime)s %(message)s', level=logging.DEBUG)
 logger = logging.getLogger(__name__)
@@ -59,44 +61,44 @@ async def setapi(ctx: BotContext[CommandEvent]):
     user = m.user
 
     if len(param) < 2:
-        await m.reply_text("""Set API Key in the following:\n
-/set_api -gp  <api_id> - For Gplink
-/set_api -atg <api_id> - For Atg Links
-/set_api -sus <api_id> - For Shareus""")
+        await m.reply_text(f"""<i>Send cmd along with required arguments</i>
+                           
+➲<u>Available Arguments</u>:
+
+1. -gp : for gplink api
+2. -atg : for atglinks api
+3. -sus : for shareus api
+4. -gl : for gyanilinks api""")
         return
 
     type = typeof(param)
     
     if type is None:
-        await m.reply_text("Use the appropriate flag.\nCheck /help for details.")
+        await m.reply_text("Use the appropriate argument.\nCheck /help for details.")
         return
     
     await update_api(id=user.id, type=type, api=param[1])
     await m.reply_text(f"Successfully set your {type} API key!")
 
-def typeof(input):
-    types = {"-gp": "gplink", "-atg": "atglinks", "-sus": "shareus"}
-    return types.get(input[0]) or None
 
-
-@app.on_message(filters.regexp(r'https?://[^\s]+'))
+@app.on_message()
 async def shorten(ctx: BotContext[MessageEvent]):
     m = ctx.event.message
     url = ctx.event.message.message
     user = m.user
     default = (await get_user(user.id)).get("shortner")
-
-    if default == "gplink":
-        shorten = await gplink.gplink(user.id, url)
-    elif default == "atglinks":
-        shorten = await atglinks.atglinks(user.id, url)
-    else:
-        shorten = await shareus.shareus(user.id, url)
+    
+    if default in types.values:
+        isvalid = await isvalidurl(url)
         
-    if re.match(r'https?://[^\s]+',shorten):
-        await m.reply_text(f"Your shortened {default} URl\n\n🔗{shorten}")
+        if isvalid:
+            shorten = await default.get_shortlink(user.id, url)
+            await m.reply_text(f"Your shortened {default} URl\n\n🔗{shorten}")
+        else:
+            await m.reply_text(f"Failed to genrerate shortened URL\n{shorten}")
+            
     else:
-        await m.reply_text(f"Failed to genrerate shortened URL\n{shorten}")
+        await m.reply_text("Set your Default shortener!")
     
     
 @app.on_command("set")
@@ -104,7 +106,6 @@ async def set_shortner(ctx: BotContext[CommandEvent]):
     m = ctx.event.message
     param = ctx.event.params
     user = m.user
-    shortners = ["gplink", "atglinks", "shareus"]
     
     if not param:
         await m.reply_text("""Usage
@@ -116,7 +117,7 @@ shareus - To enable Shareus as default
 atglinks - To enable ATGLinks as default
 
 example: /set gplink""")
-    elif param not in shortners:
+    elif param not in types.values():
         await m.reply_text("Check your input and try again🔃")
     else:
         await update_shortner(id=user.id, shortner=param)     
