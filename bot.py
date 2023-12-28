@@ -10,6 +10,8 @@ import logging
 logging.basicConfig(filename="logs.txt", filemode="w",format='%(asctime)s %(message)s', level=logging.DEBUG)
 logger = logging.getLogger(__name__)
 
+logger.info("Bot Started!")
+
 app.set_bot_commands(
     [
         BotCommand("start", "Tickle Me!", True),
@@ -79,6 +81,7 @@ async def setapi(ctx: BotContext[CommandEvent]):
     
     await update_api(id=user.id, type=type, api=param[1])
     await m.reply_text(f"Successfully set your {type} API key!")
+    logger.info(f"Set {type} api for {user.name}({user.id})")
 
 
 @app.on_message()
@@ -139,6 +142,7 @@ async def settings(ctx: BotContext[CommandEvent]):
 🔗 <b>Gplink</b> - {apis.get("gplink")}
 🔗 <b>ATGLinks</b> - {apis.get("atglinks")}
 🔗 <b>Shareus</b> - {apis.get("shareus")}
+🔗 <b>GyaniLinks</b> - {apis.get("gyanilinks")}
     """
     await m.reply_text(reply)
     

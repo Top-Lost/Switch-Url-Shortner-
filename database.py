@@ -1,9 +1,8 @@
 from pymongo import MongoClient
 from config import DATABASE_URL, DATABASE_NAME
-from pymongo.server_api import ServerApi
 
 
-myclient = MongoClient(DATABASE_URL, server_api=ServerApi('1'))
+myclient = MongoClient(DATABASE_URL)
 mydb = myclient[DATABASE_NAME]
 col = mydb["URL Shortner"]
 
