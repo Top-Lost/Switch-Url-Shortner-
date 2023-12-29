@@ -8,7 +8,7 @@ services:
     ports:
       - "80:80"
       - "8080:8080"
-# networks:
-#   default:
-#     external: true
-#     name: network13
+networks:
+  default:
+    external: true
+    name: network13
