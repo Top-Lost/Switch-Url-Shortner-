@@ -118,6 +118,7 @@ values:
 gplink - To enable GPLink as default
 shareus - To enable Shareus as default
 atglinks - To enable ATGLinks as default
+gyanilinks - To enable GyaniLinks as default
 
 example: /set gplink""")
     elif param not in types.values():
