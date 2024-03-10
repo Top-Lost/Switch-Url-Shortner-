@@ -29,4 +29,3 @@ async def get_shortlink(id, url):
         print(f"Failed to get response from API")
         return data['message']
     
-    

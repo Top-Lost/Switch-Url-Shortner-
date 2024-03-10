@@ -48,9 +48,10 @@ async def add_api(id, type, api):
     col.update_one(filter_query, update_query)
     
     
-async def update_api(id):
-    query = col.find_one({"_id":id})
-    return query.get("api")
+async def update_api(id, type, api):
+    filter_query = {"_id": id}
+    update_query = {"$set": {f"api.{type}": api}}
+    col.update_one(filter_query, update_query)
 
 
 async def update_shortner(id, shortner):

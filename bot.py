@@ -7,7 +7,7 @@ from helper import typeof, isvalidurl, types
 from loader import load_modules
 
 import logging
-logging.basicConfig(filename="logs.txt", filemode="w",format='%(asctime)s %(message)s', level=logging.DEBUG)
+logging.basicConfig(filename="logs.txt", filemode="w",format='%(asctime)s %(message)s', level=logging.INFO)
 logger = logging.getLogger(__name__)
 
 logger.info("Bot Started!")
