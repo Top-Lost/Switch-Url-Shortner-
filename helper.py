@@ -8,12 +8,9 @@ types = {"-gp": "gplink",
 
 def typeof(input):
     for short, long in types.items():
-        if input[0] == short:
+        if input[0] == short or input[0] == long:
             return long
-        elif input[0] == long:
-            return long
-        else:
-            return None
+    return None
         
         
 async def isvalidurl(url):
