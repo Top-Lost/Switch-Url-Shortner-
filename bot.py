@@ -1,5 +1,5 @@
 from client import app
-from swibots import BotContext, CommandEvent, BotCommand, MessageEvent
+from swibots import BotContext, CommandEvent, BotCommand, MessageEvent, InlineMarkup, InlineKeyboardButton
 
 from database import add_user, is_user_exist, update_api, update_shortner, update_user, get_user
 from plugins import gplink, atglinks, shareus, gyanilinks
@@ -89,19 +89,32 @@ async def shorten(ctx: BotContext[MessageEvent]):
     m = ctx.event.message
     url = ctx.event.message.message
     user = m.user
-    default = (await get_user(user.id)).get("shortner")
+    isvalid = await isvalidurl(url)
+    if not isvalid:
+        await m.reply_text(f"Failed to genrerate shortened URL")
+        return
     
-    if default in types.values:
-        isvalid = await isvalidurl(url)
-        
-        if isvalid:
-            shorten = await default.get_shortlink(user.id, url)
-            await m.reply_text(f"Your shortened {default} URl\n\n🔗{shorten}")
-        else:
-            await m.reply_text(f"Failed to genrerate shortened URL\n{shorten}")
-            
+    default = (await get_user(user.id)).get("shortner")
+    if default == "gplink":
+        shorten = await gplink.get_shortlink(user.id, url)
+    elif default == "atglinks":
+        shorten = await atglinks.get_shortlink(user.id, url)
+    elif default == "shareus":
+        shorten = await shareus.get_shortlink(user.id, url)
+    elif default == "gyanilinks":
+        shorten = await gyanilinks.get_shortlink(user.id, url)
     else:
-        await m.reply_text("Set your Default shortener!")
+        await m.reply_text(f"Coudn't Fetch default shortner")
+        
+    if shorten:
+        markup = InlineMarkup(
+            [
+                [
+                    InlineKeyboardButton("🔗shortened🔗", shorten)
+                ]
+            ]
+        )
+        await m.reply_text(f"Your shortened {default} URl\n\n🔗<copy>{shorten}</copy>", inline_markup=markup)
     
     
 @app.on_command("set")
